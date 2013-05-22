@@ -6,7 +6,7 @@ ImageToData is an extension to Brackets that allows you to convert to data any i
 See an icon somewhere and thinking, what if could see what it will render in my my style sheet ? Now you can import it directly as data image directly in Brackets !
 With ImageToData installed, simply Alt-Shift-G,
 type in the full URL and ImageToData will convert the image to data for you,
-copy the data insert it as image source url and you good to go !
+copy the data insert it as image source url and you're good to go !
 
 **For now supports png only**
 

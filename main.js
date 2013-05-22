@@ -40,9 +40,9 @@ define(function (require, exports, module) {
 	// local modules
 	var mainDialog       = require("text!dialog.html");
 
-	function getBase64Image(URL) {
+	function getBase64Image(imgUrl, $getBodyControl) {
 		var imgee = new Image();
-		imgee.src = URL;
+		imgee.src = imgUrl;
 		imgee.onload = function () {
 
 
@@ -56,15 +56,15 @@ define(function (require, exports, module) {
 
 			var dataURL = canvas.toDataURL("image/png");
 
-			$(".modal-body").append("<textarea id='data' style='height:80px; width:100%'>" + dataURL + "</textarea>");
+			$getBodyControl.append("<textarea id='data' style='height:80px; width:100%'>" + dataURL + "</textarea>");
 		};
 	}
-//    test url    http://pages.github.com/images/scrcap-author.png
+//    test url    http://images.gs-cdn.net/static/users/40_user.png
 
 
-	function loadImage(imgUrl) {
-		$(".modal-body").append("<div class='dialog-message'><br>Here is the image : <br><img class='sucked' style='max-width:560px; max-height:560px' src='" + imgUrl + "'><br>And now just copy that : <br></div>");
-		getBase64Image(imgUrl);
+	function loadImage(imgUrl, $getBodyControl) {
+		$getBodyControl.append("<br>Here is the image : <br><img class='sucked' style='max-width:550px; max-height:560px' src='" + imgUrl + "'><br>And now just copy that : <br>");
+		getBase64Image(imgUrl, $getBodyControl);
 	}
 
 	function launchUrlDialog(imgUrl) {
@@ -72,7 +72,7 @@ define(function (require, exports, module) {
 		var $dlg,
 			$title,
 			$getUrlControl,
-			dialogPromise;
+			$getBodyControl;
 
 		$dlg = $(mainDialog);
 		Dialogs.showModalDialogUsingTemplate($dlg);
@@ -80,13 +80,19 @@ define(function (require, exports, module) {
 
 		// URL input
 		$getUrlControl = $dlg.find(".get-url");
+		$getUrlControl.focus();
+
+		// ModalBody
+		$getBodyControl = $dlg.find(".data-show");
 
 		// add OK button handler
 		$dlg.on("click", ".dialog-button-ext", function (e) {
+			$getBodyControl.empty();
 			var imgUrl = $getUrlControl.val();
-			console.log("Sucking " + imgUrl);
-			loadImage(imgUrl);
+			console.log("Sucking" + imgUrl);
+			loadImage(imgUrl, $getBodyControl);
 		});
+
 	}
 
 	CommandManager.register("Edit File", COMMAND_ID, launchUrlDialog);
