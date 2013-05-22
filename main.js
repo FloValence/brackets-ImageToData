@@ -26,25 +26,32 @@
 
 define(function (require, exports, module) {
 	"use strict";
-	var COMMAND_ID = "getimage.getimage";
+	var COMMAND_ID = "getimage.convertit";
 
 	// Brackets modules
 	var EditorManager       = brackets.getModule("editor/EditorManager"),
+		ExtensionUtils      = brackets.getModule("utils/ExtensionUtils"),
 		DocumentManager     = brackets.getModule("document/DocumentManager"),
 		NativeFileSystem    = brackets.getModule("file/NativeFileSystem").NativeFileSystem,
 		CommandManager      = brackets.getModule("command/CommandManager"),
 		KeyBindingManager   = brackets.getModule("command/KeyBindingManager"),
+		Menus				= brackets.getModule("command/Menus"),
 		Dialogs             = brackets.getModule("widgets/Dialogs"),
 		Strings             = brackets.getModule("strings");
 
 	// local modules
-	var mainDialog       = require("text!dialog.html");
+	var mainDialog		= require("text!dialog.html");
 
-	function getBase64Image(imgUrl, $getBodyControl) {
+	// CSS
+	ExtensionUtils.loadStyleSheet(module, "style.css");
+
+	function loadImage(imgUrl, $getBodyControl, $getload) {
+		// Showing the image converted
+		$getBodyControl.append("<br>Here is the image : <br><img class='sucked' src='" + imgUrl + "'><br>And now just copy that : <br>");
+		// The convert to data trick
 		var imgee = new Image();
 		imgee.src = imgUrl;
 		imgee.onload = function () {
-
 
 			var canvas = document.createElement("canvas");
 			canvas.width = this.width;
@@ -53,18 +60,10 @@ define(function (require, exports, module) {
 			var ctx = canvas.getContext("2d");
 			ctx.drawImage(this, 0, 0);
 
-
 			var dataURL = canvas.toDataURL("image/png");
-
-			$getBodyControl.append("<textarea id='data' style='height:80px; width:100%'>" + dataURL + "</textarea>");
+			// Finally showing the result
+			$getBodyControl.append("<textarea class='data'>" + dataURL + "</textarea>");
 		};
-	}
-//    test url    http://images.gs-cdn.net/static/users/40_user.png
-
-
-	function loadImage(imgUrl, $getBodyControl) {
-		$getBodyControl.append("<br>Here is the image : <br><img class='sucked' style='max-width:550px; max-height:560px' src='" + imgUrl + "'><br>And now just copy that : <br>");
-		getBase64Image(imgUrl, $getBodyControl);
 	}
 
 	function launchUrlDialog(imgUrl) {
@@ -72,11 +71,11 @@ define(function (require, exports, module) {
 		var $dlg,
 			$title,
 			$getUrlControl,
-			$getBodyControl;
+			$getBodyControl,
+			$getload;
 
 		$dlg = $(mainDialog);
 		Dialogs.showModalDialogUsingTemplate($dlg);
-		// we implement our own OK button handler so we have
 
 		// URL input
 		$getUrlControl = $dlg.find(".get-url");
@@ -85,16 +84,24 @@ define(function (require, exports, module) {
 		// ModalBody
 		$getBodyControl = $dlg.find(".data-show");
 
+		// Loading Image
+		$getload = $dlg.find(".loading");
+
 		// add OK button handler
 		$dlg.on("click", ".dialog-button-ext", function (e) {
 			$getBodyControl.empty();
 			var imgUrl = $getUrlControl.val();
-			console.log("Sucking" + imgUrl);
-			loadImage(imgUrl, $getBodyControl);
+			// Ready ? Let's go !
+			if (imgUrl !== "") {
+				console.log(imgUrl);
+				loadImage(imgUrl, $getBodyControl, $getload);
+			}
 		});
-
 	}
 
-	CommandManager.register("Edit File", COMMAND_ID, launchUrlDialog);
+	CommandManager.register("ImageToData", COMMAND_ID, launchUrlDialog);
 	KeyBindingManager.addBinding(COMMAND_ID, "Alt-Shift-G");
+
+	var menu = Menus.getMenu(Menus.AppMenuBar.NAVIGATE_MENU);
+    menu.addMenuItem(COMMAND_ID);
 });
