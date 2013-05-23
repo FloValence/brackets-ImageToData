@@ -1,0 +1,10 @@
+{
+    "name": "ImageToData",
+    "description": "Turns images into Data URI",
+    "version": "1.0.0",
+    "author": "Florian Valence <florian.m.valence@gmail.com>",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/FloValence/Brackets-ImageToData.git"
+    }
+}
