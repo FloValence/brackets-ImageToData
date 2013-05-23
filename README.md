@@ -22,7 +22,7 @@ Copy and paste the repo's url in the *install extension* modal
 
 ##Licence
 
-ImageCopy is licenced under the [MIT licence](http://en.wikipedia.org/wiki/MIT_licence).
+ImageToData is licenced under the [MIT licence](http://en.wikipedia.org/wiki/MIT_licence).
 
 ##History
 
