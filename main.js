@@ -22,7 +22,15 @@
  */
 
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
-/*global define, brackets, $, Image, document */
+/*global define, brackets, $, Image, document, require, Mustache */
+
+require.config({
+    paths: {
+        "text" : "lib/text",
+        "i18n" : "lib/i18n"
+    },
+    locale: brackets.getLocale()
+});
 
 define(function (require, exports, module) {
 	"use strict";
@@ -44,7 +52,11 @@ define(function (require, exports, module) {
 	var mainDialog		= require("text!html/itd-dialog.html"),
 		idtToolbarHtml	= require("text!html/itd-toolbar.html");
 
-	var $toolbarIcon	= $(idtToolbarHtml);
+
+	var Trad             = require("strings");
+
+	var $toolbarIcon	= $(idtToolbarHtml),
+		$mainDialog;
 
 	function loadImage(imgUrl, $getBodyControl, $getload) {
 		// The convert to data trick
@@ -61,19 +73,19 @@ define(function (require, exports, module) {
 
 			var dataURL = canvas.toDataURL("image/png");
 			// Finally showing the result
-			$getBodyControl.append("And now just copy that : <br><textarea class='data'>" + dataURL + "</textarea><br>Here is the image converted : <br><img class='sucked' src='" + imgUrl + "'>");
+			$getBodyControl.append(Trad.COPY_THAT + " : <br><textarea class='data'>" + dataURL + "</textarea><br>" + Trad.IMAGE_CONV + " : <br><img class='sucked' src='" + imgUrl + "'>");
 		};
 	}
 
 	function launchUrlDialog() {
 
 		var $dlg,
-			$title,
 			$getUrlControl,
 			$getBodyControl,
 			$getload;
 
-		$dlg = $(mainDialog);
+		$dlg = $mainDialog;
+
 		Dialogs.showModalDialogUsingTemplate($dlg);
 
 		// URL input
@@ -92,7 +104,6 @@ define(function (require, exports, module) {
 			var imgUrl = $getUrlControl.val();
 			// Ready ? Let's go !
 			if (imgUrl !== "") {
-				console.log(imgUrl);
 				loadImage(imgUrl, $getBodyControl, $getload);
 			}
 		});
@@ -102,14 +113,16 @@ define(function (require, exports, module) {
 	AppInit.appReady(function () {
 		$toolbarIcon.appendTo("#main-toolbar .buttons");
 		$toolbarIcon.on('click', launchUrlDialog);
-		console.log("go append");
 		// CSS
 		ExtensionUtils.loadStyleSheet(module, "style/style.css");
 	});
 
-	CommandManager.register("ImageToData", COMMAND_ID, launchUrlDialog);
+	CommandManager.register(Trad.COMMAND_NAME, COMMAND_ID, launchUrlDialog);
 	KeyBindingManager.addBinding(COMMAND_ID, "Alt-Shift-G");
 
 	var menu = Menus.getMenu(Menus.AppMenuBar.NAVIGATE_MENU);
 	menu.addMenuItem(COMMAND_ID);
+
+	$mainDialog = $(Mustache.render(mainDialog, Trad));
+
 });

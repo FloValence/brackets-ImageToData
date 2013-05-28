@@ -1,11 +1,12 @@
 {
-    "title": "Image To Data",
-    "name": "imagetodata",
-    "description": "Turns images into Data URI",
-    "version": "1.2.0",
-    "author": "Florian Valence <florian.m.valence@gmail.com>",
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/FloValence/Brackets-ImageToData.git"
-    }
+    "title": "ImageToData",
+    "name": "flovalence.imagetodata",
+    "description": "Turns images into Data URI. Press Alt-Shift-G and put the URL in the box, that's it !",
+    "version": "1.3.0",
+    "author": "Florian Valence <florian.m.valence@gmail.com> (http://florian.valence.free.fr/)",
+    "homepage": "https://github.com/FloValence/Brackets-ImageToData",
+    "engines": {
+        "brackets": ">=0.24.0"
+    },
+    "keywords" : ["data", "URI", ".png", ".jpg"]
 }
