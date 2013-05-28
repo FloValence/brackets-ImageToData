@@ -29,7 +29,8 @@ define(function (require, exports, module) {
 	var COMMAND_ID = "getimage.convertit";
 
 	// Brackets modules
-	var EditorManager       = brackets.getModule("editor/EditorManager"),
+	var AppInit				= brackets.getModule("utils/AppInit"),
+		EditorManager       = brackets.getModule("editor/EditorManager"),
 		ExtensionUtils      = brackets.getModule("utils/ExtensionUtils"),
 		DocumentManager     = brackets.getModule("document/DocumentManager"),
 		NativeFileSystem    = brackets.getModule("file/NativeFileSystem").NativeFileSystem,
@@ -40,14 +41,12 @@ define(function (require, exports, module) {
 		Strings             = brackets.getModule("strings");
 
 	// local modules
-	var mainDialog		= require("text!dialog.html");
+	var mainDialog		= require("text!html/itd-dialog.html"),
+		idtToolbarHtml	= require("text!html/itd-toolbar.html");
 
-	// CSS
-	ExtensionUtils.loadStyleSheet(module, "style.css");
+	var $toolbarIcon	= $(idtToolbarHtml);
 
 	function loadImage(imgUrl, $getBodyControl, $getload) {
-		// Showing the image converted
-		$getBodyControl.append("<br>Here is the image : <br><img class='sucked' src='" + imgUrl + "'><br>And now just copy that : <br>");
 		// The convert to data trick
 		var imgee = new Image();
 		imgee.src = imgUrl;
@@ -62,11 +61,11 @@ define(function (require, exports, module) {
 
 			var dataURL = canvas.toDataURL("image/png");
 			// Finally showing the result
-			$getBodyControl.append("<textarea class='data'>" + dataURL + "</textarea>");
+			$getBodyControl.append("And now just copy that : <br><textarea class='data'>" + dataURL + "</textarea><br>Here is the image converted : <br><img class='sucked' src='" + imgUrl + "'>");
 		};
 	}
 
-	function launchUrlDialog(imgUrl) {
+	function launchUrlDialog() {
 
 		var $dlg,
 			$title,
@@ -99,9 +98,18 @@ define(function (require, exports, module) {
 		});
 	}
 
+	// load everything when brackets is done loading
+	AppInit.appReady(function () {
+		$toolbarIcon.appendTo("#main-toolbar .buttons");
+		$toolbarIcon.on('click', launchUrlDialog);
+		console.log("go append");
+		// CSS
+		ExtensionUtils.loadStyleSheet(module, "style/style.css");
+	});
+
 	CommandManager.register("ImageToData", COMMAND_ID, launchUrlDialog);
 	KeyBindingManager.addBinding(COMMAND_ID, "Alt-Shift-G");
 
 	var menu = Menus.getMenu(Menus.AppMenuBar.NAVIGATE_MENU);
-    menu.addMenuItem(COMMAND_ID);
+	menu.addMenuItem(COMMAND_ID);
 });
