@@ -1,5 +1,5 @@
 {
-    "name": "ImageToData",
+    "name": "imagetodata",
     "description": "Turns images into Data URI",
     "version": "1.0.0",
     "author": "Florian Valence <florian.m.valence@gmail.com>",
