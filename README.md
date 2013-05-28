@@ -15,8 +15,7 @@ copy the data insert it as image source url and you're good to go !
 
 ##To install
 
-
-Copy and paste the repo's url in the *install extension* modal
+Copy and paste the [repo's url](https://github.com/FloValence/brackets-ImageToData) in the *install extension* modal
 
 **Compatible with Brackets Sprint 24 or later**
 
@@ -25,6 +24,8 @@ Copy and paste the repo's url in the *install extension* modal
 ImageToData is licenced under the [MIT licence](http://en.wikipedia.org/wiki/MIT_licence).
 
 ##History
+
+2013-05-28 : Translation to French
 
 2013-05-27 : UI modifications
 
