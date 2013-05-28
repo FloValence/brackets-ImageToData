@@ -26,6 +26,8 @@ ImageToData is licenced under the [MIT licence](http://en.wikipedia.org/wiki/MIT
 
 ##History
 
+2013-05-27 : UI modifications
+
 2013-05-22 : V.1.0
 
 2013-05-20 : Initial release
