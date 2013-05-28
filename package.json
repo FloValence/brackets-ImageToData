@@ -1,4 +1,5 @@
 {
+    "title": "Image To Data",
     "name": "imagetodata",
     "description": "Turns images into Data URI",
     "version": "1.0.0",
