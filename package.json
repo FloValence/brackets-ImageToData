@@ -8,5 +8,14 @@
     "engines": {
         "brackets": ">=0.24.0"
     },
-    "keywords" : ["data", "URI", ".png", ".jpg"]
+    "keywords" : [
+    	"data",
+    	"URI",
+    	".png",
+    	".jpg"
+    ],
+    "contributors": [
+    	"Lance Campbell (https://github.com/lkcampbell)",
+    	"Florian Valence <florian.m.valence@gmail.com> (http://florian.valence.free.fr/)"
+    ]
 }
