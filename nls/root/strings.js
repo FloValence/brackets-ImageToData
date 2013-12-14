@@ -30,7 +30,7 @@ define({
     "COMMAND_NAME"      : "Convert into Data URI",
     "DIALOG_TITLE"      : "Choose an image to convert into data",
     "ENTER_URL"         : "Enter a URL",
-    "DIALOG_OK"         : "Convert it !",
-    "COPY_THAT"         : "And now just copy that ",
-    "IMAGE_CONV"        : "Here is the image converted "
+    "DIALOG_OK"         : "Convert it!",
+    "COPY_THAT"         : "And now just copy that",
+    "IMAGE_CONV"        : "Here is the image converted"
 });

@@ -29,8 +29,8 @@
 define({
     "COMMAND_NAME"      : "Convertir en Data URI",
     "DIALOG_TITLE"      : "Choisissez l'image à convertir",
-    "ENTER_URL"         : "Entrez une URL",
+    "ENTER_URL"         : "Entrez une URL ",
     "DIALOG_OK"         : "Convertir en Data !",
     "COPY_THAT"         : "Et voilà, copiez ce code ",
-    "IMAGE_CONV"        : "Voici l'image originale"
+    "IMAGE_CONV"        : "Voici l'image originale "
 });
