@@ -25,6 +25,8 @@ ImageToData is licenced under the [MIT licence](http://en.wikipedia.org/wiki/MIT
 
 ##History
 
+2013-12-14 : Removing NativeFileSystem
+
 2013-05-28 : Translation to French
 
 2013-05-27 : UI modifications
@@ -32,6 +34,3 @@ ImageToData is licenced under the [MIT licence](http://en.wikipedia.org/wiki/MIT
 2013-05-22 : V.1.0
 
 2013-05-20 : Initial release
-
-
-See TODO for slated improvements, feel free to suggest.
