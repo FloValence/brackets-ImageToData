@@ -8,7 +8,7 @@ See an icon somewhere and thinking, what if could see what it will render in my 
 Even works with local paths.
 
 With ImageToData installed, simply Alt-Shift-G,
-type in the full URL and ImageToData will convert the image to data for you,
+type in the full URL or select a local image and ImageToData will convert the image to data for you,
 copy the data insert it as image source url and you're good to go !
 
 **All images will be converted into png data URLs**
@@ -24,6 +24,8 @@ Copy and paste the [repo's url](https://github.com/FloValence/brackets-ImageToDa
 ImageToData is licenced under the [MIT licence](http://en.wikipedia.org/wiki/MIT_licence).
 
 ##History
+
+2014-01-04 : Add local file browsing
 
 2013-12-14 : Removing NativeFileSystem
 

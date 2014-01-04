@@ -5,8 +5,20 @@
     </div>
     <div class="modal-body">
         <div class="settings-list">
-			{{ENTER_URL}}: <input class="get-url" placeholder="http://" type="text" required>
-			<div class="loading"></div>
+            {{ENTER_URL}}: <input class="get-url" placeholder="http://" type="text">
+            
+            <br>
+            {{CHOOSE_LOCAL}}:
+            <br>
+            
+            
+            <span class="btn btn-default btn-file">
+                {{BROWSE}}
+                <input class="get-local" name="get-local" type="file" accept="image/png, image/jpg, image/gif">
+            </span>
+            <label for="get-local" class="label label-info">{{NO_SELECT}}</label>
+            
+            <div class="loading"></div>
         </div>
         <div class="data-show settings-list">
         </div>
