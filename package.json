@@ -3,7 +3,7 @@
     "title": "ImageToData",
     "description": "Turns images into Data URI. Press Alt-Shift-G and put the URL in the box, that's it !",
     "homepage": "https://github.com/FloValence/brackets-ImageToData",
-    "version": "1.3.1",
+    "version": "1.4.0",
     "author": "Florian Valence <florian.m.valence@gmail.com> (http://florian.valence.free.fr/)",
     "engines": {
         "brackets": ">=0.24.0"
