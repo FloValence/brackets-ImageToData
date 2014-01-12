@@ -32,5 +32,8 @@ define({
     "ENTER_URL"         : "Entrez une URL ",
     "DIALOG_OK"         : "Convertir en Data !",
     "COPY_THAT"         : "Et voilà, copiez ce code ",
-    "IMAGE_CONV"        : "Voici l'image originale "
+    "IMAGE_CONV"        : "Voici l'image originale ",
+    "CHOOSE_LOCAL"      : "Ou choisissez une image locale ",
+    "BROWSE"            : "Sélectionner...",
+    "NO_SELECT"         : "Aucune image choisie"
 });

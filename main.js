@@ -22,7 +22,7 @@
  */
 
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
-/*global define, brackets, $, Image, document, require, Mustache */
+/*global define, brackets, $, Image, document, require, Mustache, window */
 
 require.config({
     paths: {
@@ -75,11 +75,19 @@ define(function (require, exports, module) {
 			$getBodyControl.append(Trad.COPY_THAT + " : <br><textarea class='data'>" + dataURL + "</textarea><br>" + Trad.IMAGE_CONV + " : <br><img class='sucked' src='" + imgUrl + "'>");
 		};
 	}
+    
+    function localPath(img) {
+        //return img;
+        
+        return window.URL.createObjectURL(img);
+    }
 
 	function launchUrlDialog() {
 
 		var $dlg,
 			$getUrlControl,
+            $getLocalUrlControl,
+            $getLocalLabel,
 			$getBodyControl,
 			$getload;
 
@@ -90,6 +98,15 @@ define(function (require, exports, module) {
 		// URL input
 		$getUrlControl = $dlg.find(".get-url");
 		$getUrlControl.focus();
+        
+        // File input
+        $getLocalUrlControl = $dlg.find(".get-local");
+        $getLocalLabel = $dlg.find("[for='get-local']");
+        $getLocalUrlControl.change(function () {
+            var image = this.files[0];
+            $getLocalLabel.html(image.name);
+            $getUrlControl.html("");
+        });
 
 		// ModalBody
 		$getBodyControl = $dlg.find(".data-show");
@@ -98,9 +115,9 @@ define(function (require, exports, module) {
 		$getload = $dlg.find(".loading");
 
 		// add OK button handler
-		$dlg.on("click", ".dialog-button-ext", function (e) {
+		$dlg.on("click", ".dialog-button-ext", function () {
 			$getBodyControl.empty();
-			var imgUrl = $getUrlControl.val();
+			var imgUrl = $getUrlControl.val() || localPath($getLocalUrlControl[0].files[0]) || "";
 			// Ready ? Let's go !
 			if (imgUrl !== "") {
 				loadImage(imgUrl, $getBodyControl, $getload);

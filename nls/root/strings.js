@@ -32,5 +32,8 @@ define({
     "ENTER_URL"         : "Enter a URL",
     "DIALOG_OK"         : "Convert it!",
     "COPY_THAT"         : "And now just copy that",
-    "IMAGE_CONV"        : "Here is the image converted"
+    "IMAGE_CONV"        : "Here is the image converted",
+    "CHOOSE_LOCAL"      : "Or choose a local image",
+    "BROWSE"            : "Browse...",
+    "NO_SELECT"         : "No image selected"
 });
