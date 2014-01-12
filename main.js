@@ -34,7 +34,8 @@ require.config({
 
 define(function (require, exports, module) {
 	"use strict";
-	var COMMAND_ID = "getimage.convertit";
+	var BUTTON_CMD = "urlimage.convertit",
+        CONTEXT_CMD = "getimage.convertit";
 
 	// Brackets modules
 	var AppInit				= brackets.getModule("utils/AppInit"),
@@ -43,9 +44,12 @@ define(function (require, exports, module) {
 		DocumentManager     = brackets.getModule("document/DocumentManager"),
 		CommandManager      = brackets.getModule("command/CommandManager"),
 		KeyBindingManager   = brackets.getModule("command/KeyBindingManager"),
+        ProjectManager      = brackets.getModule("project/ProjectManager"),
 		Menus				= brackets.getModule("command/Menus"),
 		Dialogs             = brackets.getModule("widgets/Dialogs"),
 		Strings             = brackets.getModule("strings");
+    
+    var projectMenu         = Menus.getContextMenu(Menus.ContextMenuIds.PROJECT_MENU);
 
 	// local modules
 	var mainDialog		= require("text!html/itd-dialog.html"),
@@ -55,9 +59,11 @@ define(function (require, exports, module) {
 	var Trad             = require("strings");
 
 	var $toolbarIcon	= $(idtToolbarHtml),
-		$mainDialog;
+		$mainDialog,
+        localURL,
+        dataURL;
 
-	function loadImage(imgUrl, $getBodyControl, $getload) {
+	function loadImage(imgUrl, $getBodyControl) {
 		// The convert to data trick
 		var imgee = new Image();
 		imgee.src = imgUrl;
@@ -72,24 +78,102 @@ define(function (require, exports, module) {
 
 			var dataURL = canvas.toDataURL("image/png");
 			// Finally showing the result
-			$getBodyControl.append(Trad.COPY_THAT + " : <br><textarea class='data'>" + dataURL + "</textarea><br>" + Trad.IMAGE_CONV + " : <br><img class='sucked' src='" + imgUrl + "'>");
+			$getBodyControl.html(Trad.COPY_THAT + " : <br><textarea class='data'>" + dataURL + "</textarea><br>" + Trad.IMAGE_CONV + " : <br><img class='sucked' src='" + imgUrl + "'>");
 		};
 	}
     
-    function localPath(img) {
-        //return img;
+    function convertToData(imgUrl) {
+		// The convert to data trick
+		var imgee = new Image();
+		imgee.src = imgUrl;
+		imgee.onload = function () {
+
+			var canvas = document.createElement("canvas");
+			canvas.width = this.width;
+			canvas.height = this.height;
+
+			var ctx = canvas.getContext("2d");
+			ctx.drawImage(this, 0, 0);
+
+			dataURL = canvas.toDataURL("image/png");
+            
+            $('body').trigger('convertCompleted');
+            
+        };
+    }
+    
+    function showData(data, imgUrl, $getBodyControl) {
         
+        // Finally showing the result
+        $getBodyControl.html(Trad.COPY_THAT + " : <br><textarea class='data'>" + data + "</textarea><br>" + Trad.IMAGE_CONV + " : <br><img class='sucked' src='" + imgUrl + "'>");
+        $getBodyControl.find(".data").focus();
+    }
+    
+    
+/*    Functions used when right clicking an image in the project bar */
+    
+    // determine if a file is an image that can be convert
+    // parameter : entry - the current file entry object containing the file name
+    function determineFileType(fileEntry) {
+        if (fileEntry && fileEntry.fullPath && fileEntry.fullPath.match(/\.png$|.jpg$|.gif$/)) {
+            return "image";
+        } else {
+            return "unknown";
+        }
+    }
+    
+    
+    
+    // Removes menu item
+    function cleanMenu(menu) {
+        menu.removeMenuItem(CONTEXT_CMD);
+    }
+    
+    //adds a menuitem to a menu if the current file matches a known type
+    //parameters: menu - the context menu or working files menu
+    //           entry - the current file entry object containing the file name
+
+    function checkFileTypes(menu, entry) {
+        if (entry === null) {
+            return "unknown";
+        }
+        var type = determineFileType(entry);
+        if (type === "image") {
+            menu.addMenuItem(CONTEXT_CMD, "", Menus.LAST);
+        }
+    }
+    
+    // check if the extension should add a menu item to the project menu (under the project name, left panel)
+    $(projectMenu).on("beforeContextMenuOpen", function (evt) {
+        var selectedEntry = ProjectManager.getSelectedItem(),
+            text = '';
+        if (selectedEntry && selectedEntry.fullPath && DocumentManager.getCurrentDocument() !== null && selectedEntry.fullPath === DocumentManager.getCurrentDocument().file.fullPath) {
+            text = DocumentManager.getCurrentDocument().getText();
+        }
+        cleanMenu(projectMenu);
+        localURL = selectedEntry.fullPath;
+        checkFileTypes(projectMenu, selectedEntry, text);
+    });
+    
+
+    
+    
+/*    Functions used when clicking the extention button */
+    
+//    Create dynamic path for local files
+    function localPath(img) {
         return window.URL.createObjectURL(img);
     }
 
-	function launchUrlDialog() {
+//    Open the dialog box and initialize the elements
+	function openConvertDialog() {
 
 		var $dlg,
 			$getUrlControl,
             $getLocalUrlControl,
             $getLocalLabel,
-			$getBodyControl,
-			$getload;
+			$getBodyControl;
+        
 
 		$dlg = $mainDialog;
 
@@ -111,33 +195,43 @@ define(function (require, exports, module) {
 		// ModalBody
 		$getBodyControl = $dlg.find(".data-show");
 
-		// Loading Image
-		$getload = $dlg.find(".loading");
-
 		// add OK button handler
 		$dlg.on("click", ".dialog-button-ext", function () {
 			$getBodyControl.empty();
 			var imgUrl = $getUrlControl.val() || localPath($getLocalUrlControl[0].files[0]) || "";
 			// Ready ? Let's go !
 			if (imgUrl !== "") {
-				loadImage(imgUrl, $getBodyControl, $getload);
+				loadImage(imgUrl, $getBodyControl);
 			}
 		});
+        
+        return $dlg;
 	}
+       
+    
+    // Launch the extension to directly return the data URI of the selected image
+    function convertFromTree() {
+        var $dlg = openConvertDialog();
+        convertToData(localURL);
+        $('body').on('convertCompleted', function () {
+            showData(dataURL, localURL, $dlg.find(".data-show"));
+        });
+    }
 
 	// load everything when brackets is done loading
 	AppInit.appReady(function () {
 		$toolbarIcon.appendTo("#main-toolbar .buttons");
-		$toolbarIcon.on('click', launchUrlDialog);
+		$toolbarIcon.on('click', openConvertDialog);
 		// CSS
 		ExtensionUtils.loadStyleSheet(module, "style/style.css");
 	});
 
-	CommandManager.register(Trad.COMMAND_NAME, COMMAND_ID, launchUrlDialog);
-	KeyBindingManager.addBinding(COMMAND_ID, "Alt-Shift-G");
+	CommandManager.register(Trad.COMMAND_NAME, BUTTON_CMD, openConvertDialog);
+	CommandManager.register(Trad.COMMAND_NAME, CONTEXT_CMD, convertFromTree);
+	KeyBindingManager.addBinding(BUTTON_CMD, "Alt-Shift-G");
 
 	var menu = Menus.getMenu(Menus.AppMenuBar.NAVIGATE_MENU);
-	menu.addMenuItem(COMMAND_ID);
+	menu.addMenuItem(BUTTON_CMD);
 
 	$mainDialog = $(Mustache.render(mainDialog, Trad));
 
