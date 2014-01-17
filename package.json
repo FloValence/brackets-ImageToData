@@ -1,21 +1,21 @@
 {
     "name": "flovalence.imagetodata",
     "title": "ImageToData",
-    "description": "Turns images into Data URI. Press Alt-Shift-G and put the URL in the box, that's it !",
+    "description": "Turns images into Data URI. Press Alt-Shift-G and put the URL in the box, that's it ! \n From the project tree right click on an image and click 'Convert to data URI' and get it's dataURI",
     "homepage": "https://github.com/FloValence/brackets-ImageToData",
-    "version": "1.4.0",
+    "version": "1.5.0",
     "author": "Florian Valence <florian.m.valence@gmail.com> (http://florian.valence.free.fr/)",
     "engines": {
         "brackets": ">=0.24.0"
     },
     "keywords" : [
-    	"data",
-    	"URI",
-    	".png",
-    	".jpg"
+        "data",
+        "URI",
+        ".png",
+        ".jpg"
     ],
     "contributors": [
-    	"Lance Campbell (https://github.com/lkcampbell)",
-    	"Florian Valence <florian.m.valence@gmail.com> (http://florian.valence.free.fr/)"
+        "Lance Campbell (https://github.com/lkcampbell)",
+        "Florian Valence <florian.m.valence@gmail.com> (http://florian.valence.free.fr/)"
     ]
 }
