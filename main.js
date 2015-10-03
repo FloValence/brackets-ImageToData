@@ -144,7 +144,7 @@ define(function (require, exports, module) {
     }
     
     // check if the extension should add a menu item to the project menu (under the project name, left panel)
-    $(projectMenu).on("beforeContextMenuOpen", function (evt) {
+    projectMenu.on("beforeContextMenuOpen", function (evt) {
         var selectedEntry = ProjectManager.getSelectedItem(),
             text = '';
         if (selectedEntry && selectedEntry.fullPath && DocumentManager.getCurrentDocument() !== null && selectedEntry.fullPath === DocumentManager.getCurrentDocument().file.fullPath) {
